@@ -17,6 +17,7 @@ const buildNewCategories = (parentId, categories, category) => {
         _id: category._id,
         name: category.name,
         slug: category.slug,
+        type: category.type,
         children: []
       }
     ];
@@ -31,6 +32,7 @@ const buildNewCategories = (parentId, categories, category) => {
           _id: category._id,
           name: category.name,
           slug: category.slug,
+          type: category.type,
           parentId: category.parentId,
           children: category.children
         }], category) : []
@@ -79,7 +81,9 @@ export default (state = initState, action) => {
       break;
     case categoryConstansts.ADD_NEW_CATEGORY_FAILURE:
       state = {
-        ...initState
+        ...initState,
+        loading: false,
+        error: action.payload.error
       }
       break;
     case categoryConstansts.UPDATE_CATEGORIES_REQUEST:
@@ -97,6 +101,26 @@ export default (state = initState, action) => {
     case categoryConstansts.UPDATE_CATEGORIES_FAILURE:
       state = {
         ...state,
+        error: action.payload.error,
+        loading: false
+      }
+      break;
+    case categoryConstansts.DELETE_CATEGORIES_REQUEST:
+      state = {
+        ...state,
+        loading: true
+      }
+      break;
+    case categoryConstansts.DELETE_CATEGORIES_SUCCESS:
+      state = {
+        ...state,
+        loading: false
+      }
+      break;
+    case categoryConstansts.DELETE_CATEGORIES_FAILURE:
+      state = {
+        ...state,
+        loading: false,
         error: action.payload.error
       }
       break;

@@ -47,10 +47,25 @@ const Category = (props) => {
   //   dispatch(getAllCategory())
   // }, []);
 
+  useEffect(() => {
+
+    if (!category.loading) {
+      setShow(false);
+    }
+
+  }, [category.loading]);
+
+
 
   const handleClose = () => {
 
     const form = new FormData();
+
+    if (categoryName === "") {
+      alert('Category name is required');
+      setShow(false);
+      return;
+    }
 
     form.append('name', categoryName);
     form.append('parentId', parentCategoryId);
@@ -90,7 +105,12 @@ const Category = (props) => {
   const createCategoryList = (categories, options = []) => {
 
     for (let category of categories) {
-      options.push({ value: category._id, name: category.name, parentId: category.parentId });
+      options.push({
+        value: category._id,
+        name: category.name,
+        parentId: category.parentId,
+        type: category.type
+      });
       if (category.children.length > 0) {
         createCategoryList(category.children, options)
       }
@@ -151,7 +171,7 @@ const Category = (props) => {
     });
 
     dispatch(updateCategories(form))
-    setUpdateCategoryModal(false);
+    // setUpdateCategoryModal(false);
   }
 
   const deleteCategory = () => {
@@ -173,6 +193,8 @@ const Category = (props) => {
           }
         });
     }
+
+    setDeleteCategoryModal(false);
   }
 
   const renderDeleteCategoryModal = () => {
@@ -186,7 +208,7 @@ const Category = (props) => {
             label: 'No',
             color: 'primary',
             onClick: () => {
-              alert('no');
+              setDeleteCategoryModal(false);
             }
           },
           {
@@ -247,7 +269,8 @@ const Category = (props) => {
 
       <AddCategoryModal
         show={show}
-        handleClose={handleClose}
+        handleClose={() => setShow(false)}
+        onSubmit={handleClose}
         modalTitle={'Add New Category'}
         categoryName={categoryName}
         setCategoryName={setCategoryName}
@@ -258,7 +281,8 @@ const Category = (props) => {
       />
       <UpdateCategoriesModal
         show={updateCategoryModal}
-        handleClose={updateCategoriesForm}
+        handleClose={() => setUpdateCategoryModal(false)}
+        onSubmit={updateCategoriesForm}
         modalTitle={'Update Categories'}
         size="lg"
         expandedArray={expandedArray}

@@ -15,7 +15,8 @@ const AddCategoryModal = (props) => {
     parentCategoryId,
     setParentCategoryId,
     categoryList,
-    handleCategoryImage
+    handleCategoryImage,
+    onSubmit
   } = props;
 
   return (
@@ -23,6 +24,7 @@ const AddCategoryModal = (props) => {
       show={show}
       handleClose={handleClose}
       modalTitle={modalTitle}
+      onSubmit={onSubmit}
     >
       <Row>
         <Col>
@@ -30,7 +32,7 @@ const AddCategoryModal = (props) => {
             value={categoryName}
             placeholder={`Category Name`}
             onChange={(e) => setCategoryName(e.target.value)}
-            className="form-control-sm"
+            className="form-control"
           />
         </Col>
         <Col>

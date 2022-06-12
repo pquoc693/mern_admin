@@ -17,6 +17,7 @@ import { isUserLoggedIn, getInitialData } from './actions';
 import Products from './containers/Products';
 import Orders from './containers/Orders';
 import Category from './containers/Category';
+import NewPage from './containers/NewPage';
 
 
 function App() {
@@ -27,9 +28,11 @@ function App() {
     if (!auth.authenticate) {
       dispatch(isUserLoggedIn());
     }
-    dispatch(getInitialData());
+    if (auth.authenticate) {
+      dispatch(getInitialData());
+    }
 
-  }, []);
+  }, [auth.authenticate]);
 
   return (
     <div className="App">
@@ -47,6 +50,9 @@ function App() {
         </PrivateRoute>} />
         <Route path="/orders" element={<PrivateRoute>
           <Orders />
+        </PrivateRoute>} />
+        <Route path="/page" element={<PrivateRoute>
+          <NewPage />
         </PrivateRoute>} />
         <Route path="/login" element={<Signin />} />
         <Route path="/register" element={<Signup />} />
